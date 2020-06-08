@@ -17,6 +17,9 @@ FreeRadius Server (using external mysql database server) + daloRADIUS web interf
     Default: `root`
  * `MYSQL_PASS`
     Default: ""
+ * `MYSQL_INIT_DATABASE`
+    Default: `false`
+    If set to `true`, the mysql database will be initialized with default tables/values. BEWARE: If your database is not empty, some tables may be dropped and re-initialized. Recommended use is with a brand new/blank database.
  * `CLIENT_SECRET`
     Radius Secret for client devices
  * `CLIENT_NETx`

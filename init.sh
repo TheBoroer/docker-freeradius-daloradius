@@ -1,27 +1,23 @@
 #!/bin/bash
 sleep 5
 
-MYSQL="mysql -u$MYSQL_USER -p$MYSQL_PASS -h $MYSQL_HOST --port $MYSQL_PORT" 
-echo $MYSQL
-$MYSQL -e \
-"CREATE DATABASE radius; GRANT ALL ON $MYSQL_USER.* TO radius@localhost IDENTIFIED BY '$MYSQL_PASS'; \
-flush privileges;"
+if [ "$MYSQL_INIT_DATABASE" == "true" ]; then
+  echo "Initializing MySQL Database."
+  MYSQL="mysql -u$MYSQL_USER -p$MYSQL_PASS -h $MYSQL_HOST --port $MYSQL_PORT" 
+  $MYSQL -e "CREATE DATABASE $MYSQL_DATABASE; GRANT ALL ON $MYSQL_USER.* TO $MYSQL_DATABASE@% IDENTIFIED BY '$MYSQL_PASS'; \
+  flush privileges;"
 
-$MYSQL $MYSQL_DATABASE  < /etc/freeradius/sql/mysql/schema.sql
-$MYSQL $MYSQL_DATABASE  < /etc/freeradius/sql/mysql/nas.sql
-$MYSQL $MYSQL_DATABASE  < /var/www/daloradius/contrib/db/mysql-daloradius.sql
+  $MYSQL $MYSQL_DATABASE  < /etc/freeradius/sql/mysql/schema.sql
+  $MYSQL $MYSQL_DATABASE  < /etc/freeradius/sql/mysql/nas.sql
+  $MYSQL $MYSQL_DATABASE  < /var/www/daloradius/contrib/db/mysql-daloradius.sql
+fi
 
-
-
-sed -i -e 's/server = "localhost"/server = "'$MYSQL_HOST'"/g' /etc/freeradius/sql.conf
-sed -i -e 's/#port = 3306/port = '$MYSQL_PORT'/g' /etc/freeradius/sql.conf
-sed -i -e 's/login = "radius"/login = "'$MYSQL_USER'"/g' /etc/freeradius/sql.conf
-sed -i -e 's/password = "radpass"/password = "'$MYSQL_PASS'"/g' /etc/freeradius/sql.conf
-sed -i -e 's/radius_db = "radius"/radius_db = "'$MYSQL_DATABASE'"/g' /etc/freeradius/sql.conf
 sed -i -e 's/$INCLUDE sql.conf/\n$INCLUDE sql.conf/g' /etc/freeradius/radiusd.conf
 sed -i -e 's|$INCLUDE sql/mysql/counter.conf|\n$INCLUDE sql/mysql/counter.conf|g' /etc/freeradius/radiusd.conf
+
 sed -i -e 's|authorize {|authorize {\nsql|' /etc/freeradius/sites-available/inner-tunnel
 sed -i -e 's|session {|session {\nsql|' /etc/freeradius/sites-available/inner-tunnel 
+
 sed -i -e 's|authorize {|authorize {\nsql|' /etc/freeradius/sites-available/default
 sed -i -e 's|session {|session {\nsql|' /etc/freeradius/sites-available/default
 sed -i -e 's|accounting {|accounting {\nsql|' /etc/freeradius/sites-available/default
@@ -35,29 +31,12 @@ sed -i -e 's|\t#  See "Authentication Logging Queries" in sql.conf\n\t#sql|#See 
 
 sed -i -e 's|sqltrace = no|sqltrace = yes|g' /etc/freeradius/sql.conf
 
-
-
 sed -i -e "s/readclients = yes/nreadclients = yes/" /etc/freeradius/sql.conf
 echo -e "\nATTRIBUTE Usage-Limit 3000 string\nATTRIBUTE Rate-Limit 3001 string" >> /etc/freeradius/dictionary
 
 
-
-#================DALORADIUS=========================
-sed -i -e "s/$configValues\['CONFIG_DB_PASS'\] = '';/$configValues\['CONFIG_DB_PASS'\] = '"$MYSQL_PASS"';/" /var/www/daloradius/library/daloradius.conf.php
-sed -i -e "s/$configValues\['CONFIG_DB_USER'\] = 'root';/$configValues\['CONFIG_DB_USER'\] = '"$MYSQL_USER"';/" /var/www/daloradius/library/daloradius.conf.php
-sed -i -e "s/$configValues\['CONFIG_DB_HOST'\] = 'localhost';/$configValues\['CONFIG_DB_HOST'\] = '"$MYSQL_HOST"';/" /var/www/daloradius/library/daloradius.conf.php
-sed -i -e "s/$configValues\['CONFIG_DB_PORT'\] = '3306';/$configValues\['CONFIG_DB_PORT'\] = '"$MYSQL_PORT"';/" /var/www/daloradius/library/daloradius.conf.php
-sed -i -e "s/$configValues\['CONFIG_DB_NAME'\] = 'radius';/$configValues\['CONFIG_DB_NAME'\] = '"$MYSQL_DATABASE"';/" /var/www/daloradius/library/daloradius.conf.php
-
-
-
-
-# if [ -n "$CLIENT_NET" ]; then
-# echo "client $CLIENT_NET { 
-#     	secret          = $CLIENT_SECRET 
-#     	shortname       = clients 
-# }" >> /etc/freeradius/clients.conf
-# fi 
+# Unset CLIENT_NET in case it's set (without numbers at end). 
+unset CLIENT_NET
 
 # Parse the multiple CLIENT_NETx variables and append them to the configuration
 env | grep 'CLIENT_NET' | sort | while read extraline; do
@@ -68,7 +47,14 @@ env | grep 'CLIENT_NET' | sort | while read extraline; do
     }" >> /etc/freeradius/clients.conf
 done
 
+# if [ -n "$CLIENT_NET" ]; then
+# echo "client $CLIENT_NET { 
+#     	secret          = $CLIENT_SECRET 
+#     	shortname       = clients 
+# }" >> /etc/freeradius/clients.conf
+# fi 
+
 
 mkdir /run/php
 
-echo "Initialized"
+echo "init.sh: completed"

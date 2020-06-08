@@ -27,10 +27,12 @@ RUN wget https://github.com/lirantal/daloradius/archive/master.zip && \
 	chmod 644 /var/www/daloradius/library/daloradius.conf.php && \
 	rm /etc/nginx/sites-enabled/default
 
-#	cp -R /var/www/daloradius/contrib/chilli/portal2/hotspotlogin /var/www/daloradius
+# Make backups of default configs
+RUN cp /etc/freeradius/sql.conf /etc/freeradius/sql.conf.default
+RUN cp /var/www/daloradius/library/daloradius.conf.php /var/www/daloradius/library/daloradius.conf.php.default
 
-COPY init.sh /	
-COPY run.sh /	
+COPY init.sh /
+COPY run.sh /
 RUN chmod +x /init.sh && chmod +x /run.sh
 COPY etc/nginx/radius.conf /etc/nginx/sites-enabled/
 
