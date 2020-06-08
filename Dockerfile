@@ -27,10 +27,6 @@ RUN wget https://github.com/lirantal/daloradius/archive/master.zip && \
 	chmod 644 /var/www/daloradius/library/daloradius.conf.php && \
 	rm /etc/nginx/sites-enabled/default
 
-# Make backups of default configs
-RUN cp /etc/freeradius/sql.conf /etc/freeradius/sql.conf.default
-RUN cp /var/www/daloradius/library/daloradius.conf.php /var/www/daloradius/library/daloradius.conf.php.default
-
 COPY init.sh /
 COPY run.sh /
 RUN chmod +x /init.sh && chmod +x /run.sh

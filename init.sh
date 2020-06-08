@@ -1,6 +1,15 @@
 #!/bin/bash
 sleep 5
 
+# Make backups of default sql.conf
+if [ ! -f /etc/freeradius/sql.conf.default ]; then
+  cp /etc/freeradius/sql.conf /etc/freeradius/sql.conf.default
+fi
+# Make a backup of default daloradius.conf.php
+if [ ! -f /var/www/daloradius/library/daloradius.conf.php.default ]; then
+  cp /var/www/daloradius/library/daloradius.conf.php /var/www/daloradius/library/daloradius.conf.php.default
+fi
+
 if [ "$MYSQL_INIT_DATABASE" == "true" ]; then
   echo "Initializing MySQL Database."
   MYSQL="mysql -u$MYSQL_USER -p$MYSQL_PASS -h $MYSQL_HOST --port $MYSQL_PORT" 
