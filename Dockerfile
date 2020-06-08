@@ -1,5 +1,7 @@
 FROM ubuntu:bionic
 
+ARG DEBIAN_FRONTEND=noninteractive
+
 RUN apt-get update && apt-get install -y \
   mysql-client libmysqlclient-dev \
   nginx php php-common php-gd php-curl php-mail php-mail-mime php-pear php-db php-mysqlnd \
@@ -15,7 +17,7 @@ ENV MYSQL_DATABASE "radius"
 ENV MYSQL_USER "root"
 ENV MYSQL_PASS ""
 ENV CLIENT_NET1 "0.0.0.0/0"
-ENV CLIENT_SECRET testing123
+ENV CLIENT_SECRET "testing123"
 
 
 RUN wget https://github.com/lirantal/daloradius/archive/master.zip && \
