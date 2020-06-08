@@ -71,4 +71,4 @@ done
 
 mkdir /run/php
 
-echo "Initialised"
+echo "Initialized"
