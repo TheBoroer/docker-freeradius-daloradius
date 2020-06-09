@@ -7,10 +7,12 @@ sed -i "s/^\/init.sh//" /run.sh
 
 # Update DB Values for FreeRadius
 cp /etc/freeradius/3.0/mods-available/sql.default /etc/freeradius/3.0/mods-available/sql
-sed -i -e 's/server = "localhost"/server = "'$MYSQL_HOST'"/g' /etc/freeradius/3.0/mods-available/sql
-sed -i -e 's/#port = 3306/port = '$MYSQL_PORT'/g' /etc/freeradius/3.0/mods-available/sql
-sed -i -e 's/login = "radius"/login = "'$MYSQL_USER'"/g' /etc/freeradius/3.0/mods-available/sql
-sed -i -e 's/password = "radpass"/password = "'$MYSQL_PASS'"/g' /etc/freeradius/3.0/mods-available/sql
+sed -i -e 's/driver = "rlm_sql_null"/driver = "rlm_sql_mysql"/g' /etc/freeradius/3.0/mods-available/sql
+sed -i -e 's/dialect = "sqlite"/dialect = "mysql"/g' /etc/freeradius/3.0/mods-available/sql
+sed -i -e 's/#\s*server = "localhost"/server = "'$MYSQL_HOST'"/g' /etc/freeradius/3.0/mods-available/sql
+sed -i -e 's/#\s*port = 3306/port = '$MYSQL_PORT'/g' /etc/freeradius/3.0/mods-available/sql
+sed -i -e 's/#\s*login = "radius"/login = "'$MYSQL_USER'"/g' /etc/freeradius/3.0/mods-available/sql
+sed -i -e 's/#\s*password = "radpass"/password = "'$MYSQL_PASS'"/g' /etc/freeradius/3.0/mods-available/sql
 sed -i -e 's/radius_db = "radius"/radius_db = "'$MYSQL_DATABASE'"/g' /etc/freeradius/3.0/mods-available/sql
 
 # Update DB Values or daloRADIUS
