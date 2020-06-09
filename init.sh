@@ -16,8 +16,8 @@ if [ "$MYSQL_INIT_DATABASE" == "true" ]; then
   $MYSQL -e "CREATE DATABASE $MYSQL_DATABASE; GRANT ALL ON $MYSQL_USER.* TO $MYSQL_DATABASE@% IDENTIFIED BY '$MYSQL_PASS'; \
   flush privileges;"
 
-  $MYSQL $MYSQL_DATABASE  < /etc/freeradius/sql/mysql/schema.sql
-  $MYSQL $MYSQL_DATABASE  < /etc/freeradius/sql/mysql/nas.sql
+  $MYSQL $MYSQL_DATABASE  < /etc/freeradius/3.0/mods-config/sql/main/mysql/schema.sql
+  # $MYSQL $MYSQL_DATABASE  < /etc/freeradius/sql/mysql/nas.sql
   $MYSQL $MYSQL_DATABASE  < /var/www/daloradius/contrib/db/mysql-daloradius.sql
 fi
 
@@ -45,11 +45,13 @@ unset CLIENT_NET
 
 # Parse the multiple CLIENT_NETx variables and append them to the configuration
 env | grep 'CLIENT_NET' | sort | while read extraline; do
-    echo "# $extraline " >> /etc/freeradius/clients.conf
-    line=$(echo $extraline | cut -d'=' -f2-)
-    echo "client $line { 
-        	secret = $CLIENT_SECRET 
-    }" >> /etc/freeradius/clients.conf
+echo "# $extraline " >> /etc/freeradius/clients.conf
+linekey=$(echo $extraline | cut -d'=' -f2-)
+linevalue=$(echo $extraline | cut -d'=' -f2-)
+echo "client $linekey { 
+  ipaddr = $linevalue
+  secret = $CLIENT_SECRET 
+}" >> /etc/freeradius/clients.conf
 done
 
 # if [ -n "$CLIENT_NET" ]; then

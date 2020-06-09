@@ -4,7 +4,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y \
   mysql-client libmysqlclient-dev \
-  nginx php php-common php-gd php-curl php-mail php-mail-mime php-pear php-db php-mysqlnd \
+  nginx php php7.2-fpm php-common php-gd php-curl php-mail php-mail-mime php-pear php-db php-mysqlnd \
   freeradius freeradius-mysql freeradius-utils \
   wget unzip && \
   pear install DB && \
