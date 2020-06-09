@@ -21,13 +21,13 @@ if [ "$MYSQL_INIT_DATABASE" == "true" ]; then
   $MYSQL $MYSQL_DATABASE  < /var/www/daloradius/contrib/db/mysql-daloradius.sql
 fi
 
-sed -i -e 's|authorize {|authorize {\nsql|' /etc/freeradius/3.0/sites-available/inner-tunnel
-sed -i -e 's|session {|session {\nsql|' /etc/freeradius/3.0/sites-available/inner-tunnel 
-sed -i -e 's|authorize {|authorize {\nsql|' /etc/freeradius/3.0/sites-available/default
-sed -i -e 's|session {|session {\nsql|' /etc/freeradius/3.0/sites-available/default
-sed -i -e 's|accounting {|accounting {\nsql|' /etc/freeradius/3.0/sites-available/default
-sed -i -e 's|\t#  See "Authentication Logging Queries" in sql.conf\n\t#sql|#See "Authentication Logging Queries" in sql.conf\n\tsql|g' /etc/freeradius/3.0/sites-available/inner-tunnel 
-sed -i -e 's|\t#  See "Authentication Logging Queries" in sql.conf\n\t#sql|#See "Authentication Logging Queries" in sql.conf\n\tsql|g' /etc/freeradius/3.0/sites-available/default
+sed -i -e 's|authorize {|authorize {\nsql|' /etc/freeradius/sites-available/inner-tunnel
+sed -i -e 's|session {|session {\nsql|' /etc/freeradius/sites-available/inner-tunnel 
+sed -i -e 's|authorize {|authorize {\nsql|' /etc/freeradius/sites-available/default
+sed -i -e 's|session {|session {\nsql|' /etc/freeradius/sites-available/default
+sed -i -e 's|accounting {|accounting {\nsql|' /etc/freeradius/sites-available/default
+sed -i -e 's|\t#  See "Authentication Logging Queries" in sql.conf\n\t#sql|#See "Authentication Logging Queries" in sql.conf\n\tsql|g' /etc/freeradius/sites-available/inner-tunnel 
+sed -i -e 's|\t#  See "Authentication Logging Queries" in sql.conf\n\t#sql|#See "Authentication Logging Queries" in sql.conf\n\tsql|g' /etc/freeradius/sites-available/default
 
 sed -i -e 's/$INCLUDE sql.conf/\n$INCLUDE sql.conf/g' /etc/freeradius/radiusd.conf
 sed -i -e 's|$INCLUDE sql/mysql/counter.conf|\n$INCLUDE sql/mysql/counter.conf|g' /etc/freeradius/radiusd.conf
