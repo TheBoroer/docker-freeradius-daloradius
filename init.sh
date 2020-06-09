@@ -50,7 +50,11 @@ linekey=$(echo $extraline | cut -d'=' -f1)
 linevalue=$(echo $extraline | cut -d'=' -f2-)
 echo "client $linekey { 
   ipaddr = $linevalue
-  secret = $CLIENT_SECRET 
+  secret = $CLIENT_SECRET
+  limit {
+    max_connections = $CLIENT_MAX_CONNECTIONS
+    idle_timeout = $CLIENT_IDLE_TIMEOUT
+  }
 }" >> /etc/freeradius/3.0/clients.conf
 done
 

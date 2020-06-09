@@ -24,6 +24,13 @@ FreeRadius Server (using external mysql database server) + daloRADIUS web interf
     Radius Secret for client devices
  * `CLIENT_NETx`
     Networks where your radius clients will be connecting from (for example 192.168.0.0/16). `x` should be replaced by a number. Supports adding multiple client IPs/Networks by specifying multiple CLIENT_NETx variables. For example: CLIENT_NET1=192.168.0.0/24 CLIENT_NET2=192.168.100.0/24. If none is specified, the default is set to allowing all IPs to connect: 0.0.0.0/0
+  * `CLIENT_MAX_CONNECTIONS`
+    Default: `16`
+    Limit the number of simultaneous TCP connections from a client (applied to each CLIENT_NETx client). Setting this to 0 means "no limit"
+  * `CLIENT_IDLE_TIMEOUT`
+    Default: `30`
+    The idle timeout, in seconds, of a TCP connection (applied to each CLIENT_NETx client). If no packets have been received over the connection for this time, the connection will be closed. Setting this to 0 means "no timeout".
+    It's STRONGLY RECOMMEND that you set an idle timeout.
 
 
 ## Example Usage

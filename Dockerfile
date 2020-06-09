@@ -18,6 +18,8 @@ ENV MYSQL_USER "root"
 ENV MYSQL_PASS ""
 ENV CLIENT_NET1 "0.0.0.0/0"
 ENV CLIENT_SECRET "testing123"
+ENV CLIENT_MAX_CONNECTIONS "16"
+ENV CLIENT_IDLE_TIMEOUT "30"
 
 
 RUN wget https://github.com/lirantal/daloradius/archive/master.zip && \
