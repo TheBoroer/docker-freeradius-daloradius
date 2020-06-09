@@ -32,6 +32,9 @@ COPY run.sh /
 RUN chmod +x /init.sh && chmod +x /run.sh
 COPY etc/nginx/radius.conf /etc/nginx/sites-enabled/
 
+# Enable Additional FreeRadius Mods
+ln -s /etc/freeradius/3.0/mods-available/sql /etc/freeradius/3.0/mods-enabled/sql
+
 EXPOSE 1812 1813 80
 
 ENTRYPOINT ["/run.sh"]
