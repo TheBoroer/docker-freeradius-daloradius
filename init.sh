@@ -46,7 +46,7 @@ unset CLIENT_NET
 # Parse the multiple CLIENT_NETx variables and append them to the configuration
 env | grep 'CLIENT_NET' | sort | while read extraline; do
 echo "# $extraline " >> /etc/freeradius/clients.conf
-linekey=$(echo $extraline | cut -d'=' -f2-)
+linekey=$(echo $extraline | cut -d'=' -f1)
 linevalue=$(echo $extraline | cut -d'=' -f2-)
 echo "client $linekey { 
   ipaddr = $linevalue
