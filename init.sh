@@ -40,6 +40,15 @@ sed -i -e "s/readclients = yes/nreadclients = yes/" /etc/freeradius/3.0/sql.conf
 echo -e "\nATTRIBUTE Usage-Limit 3000 string\nATTRIBUTE Rate-Limit 3001 string" >> /etc/freeradius/3.0/dictionary
 
 
+sed -i -e 's|cleanup_delay = 5|cleanup_delay = 10|g' /etc/freeradius/3.0/radiusd.conf
+sed -i -e 's|max_requests = 16384|max_requests = 500000|g' /etc/freeradius/3.0/radiusd.conf
+sed -i -e 's|reject_delay = 1|reject_delay = 1|g' /etc/freeradius/3.0/radiusd.conf
+sed -i -e 's|start_servers = 5|start_servers = 100|g' /etc/freeradius/3.0/radiusd.conf
+sed -i -e 's|max_servers = 32|max_servers = 2500|g' /etc/freeradius/3.0/radiusd.conf
+sed -i -e 's|min_spare_servers = 3|min_spare_servers = 25|g' /etc/freeradius/3.0/radiusd.conf
+sed -i -e 's|max_spare_servers = 10|max_spare_servers = 100|g' /etc/freeradius/3.0/radiusd.conf
+
+
 # Unset CLIENT_NET in case it's set (without numbers at end). 
 unset CLIENT_NET
 
