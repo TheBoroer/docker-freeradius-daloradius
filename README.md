@@ -3,7 +3,9 @@
 
 
 ## Quick reference
-FreeRadius Server (using external mysql database server) + daloRADIUS web interface
+Docker image containing FreeRadius Server (using external mysql database server) + daloRADIUS web interface.
+
+Get the docker container image here: [Docker Hub](https://hub.docker.com/r/boro/freeradius-daloradius)
 
 ## Environment Variables
 
